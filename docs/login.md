@@ -4,29 +4,38 @@
 The login feature allows users to authenticate with the application using various methods.
 
 ## Implementation Details
-- Authentication will be handled through Supabase
-- Support for multiple login methods:
+- Authentication is handled through Supabase
+- Current implementation includes:
+  - Email/Password authentication
+- Planned support for:
   - Google Sign-In
   - Apple Sign-In
   - Email with Magic Link (passwordless)
 
 ## User Flow
 1. User opens the app
-2. User is presented with login options
-3. User selects preferred login method
-4. Authentication is processed
-5. User is directed to the main app or onboarding (for new users)
+2. If not authenticated:
+   - User is presented with signup page
+   - Option to navigate to login page if they have an account
+3. User can:
+   - Create a new account with email/password
+   - Login with existing email/password
+4. Upon successful authentication:
+   - User is redirected to the main app
+   - Session is maintained using Supabase's session management
 
 ## Technical Considerations
-- Secure token storage
-- Token refresh mechanism
-- Handling authentication errors
-- User session management
+- Secure token storage handled by Supabase
+- Token refresh mechanism managed by Supabase client
+- Error handling implemented for authentication failures
+- User session management through Supabase's `onAuthStateChange`
 
 ## Status
-- [ ] Design mockups
-- [ ] Supabase integration
+- [x] Basic authentication flow
+- [x] Email/Password signup
+- [x] Email/Password login
+- [x] Session management
 - [ ] Google authentication
 - [ ] Apple authentication
-- [ ] Email authentication
+- [ ] Email Magic Link authentication
 - [ ] Testing and validation 
