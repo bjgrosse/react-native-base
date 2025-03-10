@@ -1,5 +1,5 @@
 # Project Overivew
-## Idea
+## App Overview
 * Core Idea: Personalized daily affirmations app powered by an LLM
     * Affirmations uniquely tailored to individual goals, challenges, and priorities
     * Dynamically evolves as users update their goals and struggles or provides thoughts/feedback on generated affirmations
