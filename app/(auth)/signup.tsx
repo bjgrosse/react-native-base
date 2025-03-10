@@ -55,7 +55,7 @@ export default function SignUp() {
       setLoading(true);
       setError(null);
 
-      const { error } = await supabase.auth.signUp({
+      const { data, error } = await supabase.auth.signUp({
         email,
         password,
         options: {
@@ -63,7 +63,30 @@ export default function SignUp() {
         },
       });
 
-      if (error) throw error;
+      console.log("Sign up response:", error);
+
+      if (
+        data.user &&
+        data.user.identities &&
+        data.user.identities.length === 0
+      ) {
+        //
+        const { data: signInData, error: signInError } =
+          await supabase.auth.signInWithPassword({
+            email,
+            password,
+          });
+
+        console.log("Sign in response:", signInError, signInData);
+
+        if (signInError) {
+          throw Error("That email is already in use");
+        }
+
+        // If sign in successful, redirect to main app
+        router.replace("/(tabs)");
+        return;
+      }
 
       setIsVerificationSent(true);
       Alert.alert(
@@ -72,6 +95,7 @@ export default function SignUp() {
         [{ text: "OK" }]
       );
     } catch (err) {
+      console.error("Error during signup/signin:", err);
       setError(err instanceof Error ? err.message : "An error occurred");
     } finally {
       setLoading(false);
@@ -180,7 +204,6 @@ const styles = StyleSheet.create({
     color: "#0284c7",
   },
   verificationContainer: {
-    flex: 1,
     justifyContent: "center",
     alignItems: "center",
   },
