@@ -1,9 +1,7 @@
 import { createClient } from "@supabase/supabase-js";
 import "react-native-url-polyfill/auto";
-import Constants from "expo-constants";
-
-const supabaseUrl = Constants.expoConfig?.extra?.supabaseUrl as string;
-const supabaseKey = Constants.expoConfig?.extra?.supabaseKey as string;
+const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL as string;
+const supabaseKey = process.env.EXPO_PUBLIC_SUPABASE_KEY as string;
 
 if (!supabaseUrl || !supabaseKey) {
   throw new Error("Missing Supabase configuration. Check app.config.js");
