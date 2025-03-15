@@ -9,6 +9,7 @@ import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { ProfileMenu } from "@/components/ProfileMenu";
 import { Box } from "@/components/ui/box";
+import { Paintbrush2 } from "lucide-react-native";
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
@@ -50,6 +51,13 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => (
             <IconSymbol size={28} name="paperplane.fill" color={color} />
           ),
+        }}
+      />
+      <Tabs.Screen
+        name="styles"
+        options={{
+          title: "Styles",
+          tabBarIcon: ({ color }) => <Paintbrush2 size={28} color={color} />,
         }}
       />
     </Tabs>

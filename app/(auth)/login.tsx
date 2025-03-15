@@ -8,12 +8,14 @@ import {
 } from "react-native";
 import { Link, router } from "expo-router";
 import supabase from "../../supabaseClient";
+import { useAuth } from "../context/AuthContext";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const { session, isLoading } = useAuth();
 
   const handleLogin = async () => {
     try {
@@ -38,7 +40,7 @@ export default function Login() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Welcome Back</Text>
+      <Text style={styles.title}>Welcome Back {session?.user.id}</Text>
 
       {error && <Text style={styles.error}>{error}</Text>}
 

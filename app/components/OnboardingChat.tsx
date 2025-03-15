@@ -1,21 +1,23 @@
 import React, { useState, useCallback, useEffect } from "react";
-import { postChatMessage } from "../api/chat";
+import { getChatHistory, postChatMessage } from "../api/chat";
 import { Text } from "react-native";
 import { Message } from "@/types/chat";
 import { ChatBox } from "@/components/chat/ChatBox";
 import { makeApiRequest } from "../api/fetch";
 import { useAuth } from "../context/AuthContext";
+import { Button } from "@/components/ui/button";
 
 export function OnboardingChat() {
   const [messages, setMessages] = useState<Message[]>([]);
-  useEffect(() => {
-    setMessages([
-      {
-        content: "Hello developer",
-        role: "human",
-      },
-    ]);
+
+  const fetchChatHistory = useCallback(async () => {
+    const history = await getChatHistory();
+    console.log(history);
+    setMessages((prev) => [...prev, ...(history.messages || [])]);
   }, []);
+  useEffect(() => {
+    fetchChatHistory();
+  }, [fetchChatHistory]);
 
   const onSend = useCallback(async (content: string) => {
     console.log("Sending message:", content);
@@ -30,5 +32,12 @@ export function OnboardingChat() {
       { content: result.message, role: "ai" },
     ]);
   }, []);
-  return <ChatBox messages={messages} onSendMessage={onSend} />;
+  return (
+    <>
+      <Button onPress={fetchChatHistory}>
+        <Text>Fetch Chat History</Text>
+      </Button>
+      <ChatBox messages={messages} onSendMessage={onSend} />;
+    </>
+  );
 }

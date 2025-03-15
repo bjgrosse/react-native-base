@@ -27,12 +27,12 @@ import { useColorScheme } from "@/hooks/useColorScheme";
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
-function useProtectedRoute(session: Session | null) {
+function useProtectedRoute(session: Session | null, isLoading: boolean) {
   const segments = useSegments();
   const navigationState = useRootNavigationState();
 
   useEffect(() => {
-    if (!navigationState?.key) return;
+    if (!navigationState?.key || isLoading) return;
 
     const inAuthGroup = segments[0] === "(auth)";
 
@@ -43,7 +43,7 @@ function useProtectedRoute(session: Session | null) {
       // Redirect to home if user is logged in and in auth group
       router.replace("/(tabs)");
     }
-  }, [session, segments, navigationState?.key]);
+  }, [session, segments, navigationState?.key, isLoading]);
 }
 
 export default function RootLayout() {
@@ -52,12 +52,14 @@ export default function RootLayout() {
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
   });
   const [session, setSession] = useState<Session | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-  useProtectedRoute(session);
+  useProtectedRoute(session, isLoading);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
+      setIsLoading(false);
     });
 
     supabase.auth.onAuthStateChange((_event, session) => {
@@ -71,8 +73,8 @@ export default function RootLayout() {
     }
   }, [loaded]);
 
-  if (!loaded) {
-    return null;
+  if (!loaded || isLoading) {
+    return null; // This will keep the splash screen visible
   }
 
   return (

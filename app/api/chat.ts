@@ -7,3 +7,9 @@ export async function postChatMessage(
     body: { message },
   });
 }
+
+export async function getChatHistory() {
+  return await makeApiRequest("/climb/onboarding-chat", {
+    method: "GET",
+  });
+}
